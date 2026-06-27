@@ -148,4 +148,31 @@ class Database(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return count
     }
+
+    fun getCoffeeById(id: Long): CoffeeItem? {
+        val db = readableDatabase
+        val cursor = db.query(
+            DB_TABLE,
+            null,
+            "$DB_FIELD_ID = ?",
+            arrayOf(id.toString()),
+            null,
+            null,
+            null
+        )
+
+        var coffee: CoffeeItem? = null
+        if (cursor.moveToFirst()) {
+            coffee = CoffeeItem(
+                cursor.getString(cursor.getColumnIndexOrThrow(DB_FIELD_NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DB_FIELD_CATEGORY)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DB_FIELD_DESCRIPTION)),
+                cursor.getFloat(cursor.getColumnIndexOrThrow(DB_FIELD_PRICE))
+            )
+            coffee.id = cursor.getLong(cursor.getColumnIndexOrThrow(DB_FIELD_ID))
+        }
+        cursor.close()
+
+        return coffee
+    }
 }
