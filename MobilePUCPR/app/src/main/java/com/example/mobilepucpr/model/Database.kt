@@ -10,7 +10,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     companion object {
         const val DATABASE_NAME = "coffees.db"
         const val DATABASE_VERSION = 1
-        const val DB_TABLE = "coffeeItem"
+        const val DB_TABLE = "coffee_items"
         const val DB_FIELD_ID = "id"
         const val DB_FIELD_NAME = "name"
         const val DB_FIELD_DESCRIPTION = "description"
@@ -24,7 +24,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 "$DB_FIELD_NAME TEXT, " +
                 "$DB_FIELD_DESCRIPTION TEXT, " +
                 "$DB_FIELD_CATEGORY TEXT, " +
-                "$DB_FIELD_PRICE FLOAT);"
+                "$DB_FIELD_PRICE REAL);"
 
         val db = db ?: return
 
@@ -46,7 +46,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     fun getAllCoffees(): MutableList<CoffeeItem> {
-        var coffees = mutableListOf<CoffeeItem>()
+        val coffees = mutableListOf<CoffeeItem>()
         val db = readableDatabase
         val cursor = db.query(
             DB_TABLE,
@@ -69,6 +69,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 coffees.add(coffeeItem)
             }
         }
+        cursor.close()
 
         return coffees
     }
